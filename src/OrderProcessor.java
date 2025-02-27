@@ -20,35 +20,32 @@ public class OrderProcessor {
 
     public static List<Order> filterHighValueCompletedOrders(List<Order> orders) {
         return orders.stream()
-                .filter(order -> "completed".equalsIgnoreCase(order.status()) && order.amount() > 200)
+                .filter(order -> "completed".equalsIgnoreCase(order.status()) && order.amount() >= 100)
                 .toList();
 
     }
 
+
     public static Supplier<String> reportTitle = () -> "Summary Report for High-Value Completed Orders:";
 
-    // Updates a mutable summary Map with the count and total amount.
     public static Map<String, Object> createSummaryReport(List<Order> orders) {
-        double totalAmount = orders.stream().map(Order::amount).reduce(0.0, Double::sum);
-        Map<String, Object> summaryReport = new HashMap<>();
-        summaryReport.put("count", orders.size());
-        summaryReport.put("total_amount", MoneyFormatter.formatCurrency.apply(totalAmount));
-        return summaryReport;
+        return new HashMap<>() {{
+            put("count", orders.size());
+            put("total_amount", MoneyFormatter.formatCurrency.apply(orders.stream().map(Order::amount).reduce(0.0, Double::sum)));
+        }};
 
     }
 
 
     public static void main(String[] args) {
-//        System.out.println(orderID.get());
         runApp();
-
-
     }
 
     private static void runApp() {
-        final int NUM_ORDERS = 200;
+        final int NUM_ORDERS = 10;
         List<Order> orders = generateOrders(NUM_ORDERS);
         List<Order> highValueCompletedOrders = filterHighValueCompletedOrders(orders);
+
 
         Map<String, Object> summaryReport = createSummaryReport(highValueCompletedOrders);
 
