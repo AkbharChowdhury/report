@@ -1,5 +1,7 @@
+import java.text.MessageFormat;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -15,6 +17,8 @@ public class OrderProcessor {
         }
         return orders;
     }
+
+    public static BiFunction<String, Integer, String> greetPerson = (name, age) -> MessageFormat.format("Hello {0}. you are {1}", name, age);
 
     public static Function<Integer, String> genOrderID = (i) -> String.format("ORD %d", (i + 1));
 
@@ -38,6 +42,7 @@ public class OrderProcessor {
 
 
     public static void main(String[] args) {
+//        System.out.println( greetPerson.apply("Jack", 21));
         runApp();
     }
 
