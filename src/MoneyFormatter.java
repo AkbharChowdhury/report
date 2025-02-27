@@ -1,9 +1,8 @@
 import java.text.NumberFormat;
 import java.util.Locale;
+import java.util.function.Function;
 
 public class MoneyFormatter {
-    public static String formatCurrency(double amount){
-        return NumberFormat.getCurrencyInstance(Locale.UK).format(amount);
+    public static Function<Double, String> formatCurrency = amount -> NumberFormat.getCurrencyInstance(Locale.UK).format(amount);
 
-    }
 }
