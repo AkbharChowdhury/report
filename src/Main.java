@@ -1,6 +1,5 @@
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.text.Collator;
+import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -30,6 +29,7 @@ public class Main {
             new Employee(402, "James Morgan", "Marketing"),
             new Employee(403, "Morgan Smith", "IT"),
             new Employee(404, "Chris Evans", "IT"),
+            new Employee(404, "Adam Johnson", "IT"),
             new Employee(403, "Morgan Smith", "HR"),
             new Employee(404, "Chris Evans", "HE")
     );
@@ -45,10 +45,14 @@ public class Main {
                             return existing;
                         }));
         var departments = departmentMap.keySet();
-        departments.forEach(department -> departmentMap.put(department, departmentMap.get(department).stream().sorted().toList()));
-        System.out.println(departmentMap);
+        departments.forEach(department -> departmentMap.put(department, departmentMap.get(department)
+                .stream()
+                .sorted()
+                .toList())
+        );
 
+        departmentMap.entrySet().forEach(System.out::println);
 
-    }
+          }
 
 }
