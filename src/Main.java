@@ -3,6 +3,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+
 // ref https://medium.com/@AlexanderObregon/javas-collectors-tomap-method-explained-f95999d4ebe6
 class Product {
     private int id;
@@ -25,10 +26,12 @@ class Product {
 
 public class Main {
     public static Supplier<List<Employee>> getEmployeeData = () -> List.of(
-            new Employee(401, "Lily", "Marketing"),
-            new Employee(402, "James", "Marketing"),
-            new Employee(403, "Morgan", "IT"),
-            new Employee(404, "Chris", "IT")
+            new Employee(401, "Lily Smith", "Marketing"),
+            new Employee(402, "James Morgan", "Marketing"),
+            new Employee(403, "Morgan Smith", "IT"),
+            new Employee(404, "Chris Evans", "IT"),
+            new Employee(403, "Morgan Smith", "HR"),
+            new Employee(404, "Chris Evans", "HE")
     );
 
     public static void main(String[] args) {
@@ -41,12 +44,11 @@ public class Main {
                             existing.addAll(replacement);
                             return existing;
                         }));
-
-        departmentMap.entrySet().forEach(i -> {
-            System.out.println(i.getKey());
-            System.out.println(i.getValue());
-        });
+        var departments = departmentMap.keySet();
+        departments.forEach(department -> departmentMap.put(department, departmentMap.get(department).stream().sorted().toList()));
+        System.out.println(departmentMap);
 
 
     }
+
 }
