@@ -1,27 +1,9 @@
-import java.text.Collator;
 import java.util.*;
+import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 // ref https://medium.com/@AlexanderObregon/javas-collectors-tomap-method-explained-f95999d4ebe6
-class Product {
-    private int id;
-    private double price;
-
-
-    public Product(int id, double price) {
-        this.id = id;
-        this.price = price;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-}
 
 public class Main {
     public static Supplier<List<Employee>> getEmployeeData = () -> List.of(
@@ -33,26 +15,23 @@ public class Main {
             new Employee(403, "Morgan Smith", "HR"),
             new Employee(404, "Chris Evans", "HE")
     );
-
     public static void main(String[] args) {
         var employees = getEmployeeData.get();
-        Map<String, List<String>> departmentMap = employees.stream()
-                .collect(Collectors.toMap(
-                        Employee::getDepartment,
-                        e -> new ArrayList<>(List.of(e.getName())),
-                        (existing, replacement) -> {
-                            existing.addAll(replacement);
-                            return existing;
-                        }));
-        var departments = departmentMap.keySet();
-        departments.forEach(department -> departmentMap.put(department, departmentMap.get(department)
-                .stream()
-                .sorted()
-                .toList())
-        );
-
+        Map<String, List<String>> departmentMap = employees.stream().collect(Collectors.toMap(Employee::getDepartment,
+                e -> new ArrayList<>(List.of(e.getName())), (existing, replacement) -> {
+                    existing.addAll(replacement);
+                    return existing;
+                }));
+        Set<String> departments = departmentMap.keySet();
+        departments.forEach(department -> departmentMap.put(department, sortedNames.apply(departmentMap.get(department))));
         departmentMap.entrySet().forEach(System.out::println);
+    }
+    public static Function<List<String>, List<String>> sortedNames = names ->
+            names.stream()
+                    .map(n -> n.split(" "))
+                    .sorted( (c1, c2) -> c1[1].compareTo(c2[1]) )
+                    .map(n -> n[0] + " " + n[1])
+                    .toList();
 
-          }
 
 }
