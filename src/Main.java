@@ -29,7 +29,7 @@ public class Main {
     public static Function<List<String>, List<String>> sortedNames = names ->
             names.stream()
                     .map(n -> n.split(" "))
-                    .sorted( (c1, c2) -> c1[1].compareTo(c2[1]) )
+                    .sorted(Comparator.comparing(c -> c[1], Comparator.reverseOrder()))
                     .map(n -> n[0] + " " + n[1])
                     .toList();
 
