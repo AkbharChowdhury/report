@@ -15,7 +15,12 @@ public class Main {
             new Employee(403, "Morgan Smith", "HR"),
             new Employee(404, "Chris Evans", "HE")
     );
+
     public static void main(String[] args) {
+       runApp();
+    }
+
+    static void runApp() {
         var employees = getEmployeeData.get();
         Map<String, List<String>> departmentMap = employees.stream().collect(Collectors.toMap(Employee::getDepartment,
                 e -> new ArrayList<>(List.of(e.getName())), (existing, replacement) -> {
@@ -23,14 +28,16 @@ public class Main {
                     return existing;
                 }));
         Set<String> departments = departmentMap.keySet();
-        departments.forEach(department -> departmentMap.put(department, sortedNames.apply(departmentMap.get(department))));
+        System.out.println("All departments " + departments);
+        departments.forEach(department -> departmentMap.replace(department, sortedNames.apply(departmentMap.get(department))));
         departmentMap.entrySet().forEach(System.out::println);
     }
+
     public static Function<List<String>, List<String>> sortedNames = names ->
             names.stream()
                     .map(n -> n.split(" "))
-                    .sorted(Comparator.comparing(c -> c[1], Comparator.reverseOrder()))
-                    .map(n -> n[0] + " " + n[1])
+                    .sorted(Comparator.comparing(c -> c[0]))
+                    .map(n ->  n[0].concat(" ").concat(n[1]))
                     .toList();
 
 
